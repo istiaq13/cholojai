@@ -1,5 +1,7 @@
+import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
+import { AnimatedHeroCards } from "@/components/animated-hero-cards"
 import { WhatsAppContact } from "@/components/whatsapp-contact"
 
 export default function Home() {
@@ -8,8 +10,11 @@ export default function Home() {
       <Header />
       <div className="relative">
         <HeroSection />
+        <AnimatedHeroCards />
       </div>
-      <WhatsAppContact />
+      <Suspense fallback={null}>
+        <WhatsAppContact />
+      </Suspense>
     </main>
   )
 }
