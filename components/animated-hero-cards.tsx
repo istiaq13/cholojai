@@ -41,7 +41,6 @@ export function AnimatedHeroCards() {
   const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Trigger entrance animation on mount
     const timer = setTimeout(() => {
       setIsVisible(true)
     }, 300)
@@ -49,11 +48,10 @@ export function AnimatedHeroCards() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // When scrolling down and section is leaving viewport (top goes above screen)
+
           if (!entry.isIntersecting && entry.boundingClientRect.top < -100) {
             setShouldTransform(true)
           } 
-          // When scrolling up and section comes back into view
           else if (entry.isIntersecting || entry.boundingClientRect.top >= -100) {
             setShouldTransform(false)
           }
