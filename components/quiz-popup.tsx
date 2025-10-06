@@ -59,7 +59,8 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
   }
 
   const handleSubmit = () => {
-    sessionStorage.setItem('quizData', JSON.stringify(quizData)) // Store quiz data in sessionStorage
+    // Store quiz data in sessionStorage for the result page
+    sessionStorage.setItem('quizData', JSON.stringify(quizData))
     
     // Preserve UTM parameters
     const urlParams = new URLSearchParams(window.location.search)
@@ -149,9 +150,7 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
           </div>
         </div>
 
-
-        {/* CONTENT OF THE POPUP */}
-
+        {/* Content */}
         <div className="p-6">
           {/*Nickname Section in the Popup */}
           {currentStep === 1 && (

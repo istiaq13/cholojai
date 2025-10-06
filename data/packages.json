@@ -1,0 +1,221 @@
+{
+  "packages": [
+    {
+      "id": 1,
+      "name": "Sajek Valley Adventure",
+      "destination": "sajek",
+      "country": "Bangladesh",
+      "budget": "low",
+      "price": 8000,
+      "duration": "2 days 1 night",
+      "image": "/sajek.jpg",
+      "description": "Experience the breathtaking beauty of Sajek Valley with stunning hill views and cloud-touching peaks.",
+      "includes": [
+        "Transportation from Dhaka",
+        "1 night accommodation",
+        "All meals included",
+        "Local guide",
+        "Sunset point visit"
+      ],
+      "highlights": [
+        "Cloud touching experience",
+        "Panoramic hill views", 
+        "Traditional tribal culture",
+        "Photography opportunities"
+      ],
+      "visa_required": false
+    },
+    {
+      "id": 2,
+      "name": "Cox's Bazar Beach Getaway",
+      "destination": "coxs",
+      "country": "Bangladesh", 
+      "budget": "low",
+      "price": 6000,
+      "duration": "3 days 2 nights",
+      "image": "/coxs.jpg",
+      "description": "Relax at the world's longest natural sea beach with golden sand and clear blue waters.",
+      "includes": [
+        "Transportation from Dhaka",
+        "2 nights hotel stay",
+        "Breakfast included",
+        "Beach activities",
+        "Inani Beach visit"
+      ],
+      "highlights": [
+        "World's longest sea beach",
+        "Golden sand beaches",
+        "Fresh seafood",
+        "Water sports activities"
+      ],
+      "visa_required": false
+    },
+    {
+      "id": 3,
+      "name": "Bangkok City Explorer",
+      "destination": "bangkok",
+      "country": "Thailand",
+      "budget": "medium",
+      "price": 35000,
+      "duration": "4 days 3 nights",
+      "image": "/bangkok.jpg",
+      "description": "Discover the vibrant culture of Bangkok with temples, markets, and delicious street food.",
+      "includes": [
+        "Round trip flights",
+        "3 nights 3-star hotel",
+        "Daily breakfast",
+        "Airport transfers",
+        "City tour guide"
+      ],
+      "highlights": [
+        "Grand Palace visit",
+        "Floating market tour",
+        "Temple hopping",
+        "Street food experience"
+      ],
+      "visa_required": true,
+      "visa_info": {
+        "type": "Tourist Visa",
+        "duration": "15-30 days",
+        "requirements": [
+          "Valid passport (6+ months)",
+          "Visa application form",
+          "Recent passport photos",
+          "Flight tickets",
+          "Hotel booking confirmation",
+          "Bank statement (3 months)",
+          "Visa fee: 1,000 BDT"
+        ],
+        "processing_time": "3-5 working days"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Bangkok Premium Package",
+      "destination": "bangkok", 
+      "country": "Thailand",
+      "budget": "high",
+      "price": 65000,
+      "duration": "5 days 4 nights",
+      "image": "/bangkok.jpg",
+      "description": "Luxury Bangkok experience with premium hotels, private tours, and exclusive dining.",
+      "includes": [
+        "Premium flights",
+        "4 nights 5-star hotel",
+        "All meals included",
+        "Private car with driver",
+        "Premium spa session"
+      ],
+      "highlights": [
+        "Luxury accommodation",
+        "Private guided tours",
+        "Fine dining experiences",
+        "VIP airport services"
+      ],
+      "visa_required": true,
+      "visa_info": {
+        "type": "Tourist Visa", 
+        "duration": "15-30 days",
+        "requirements": [
+          "Valid passport (6+ months)",
+          "Visa application form",
+          "Recent passport photos",
+          "Flight tickets",
+          "Hotel booking confirmation",
+          "Bank statement (3 months)",
+          "Visa fee: 1,000 BDT"
+        ],
+        "processing_time": "3-5 working days"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Dubai Desert Safari",
+      "destination": "uae",
+      "country": "UAE",
+      "budget": "medium",
+      "price": 45000,
+      "duration": "4 days 3 nights",
+      "image": "/uae.jpg",
+      "description": "Experience the magic of Dubai with desert adventures, modern attractions, and luxury shopping.",
+      "includes": [
+        "Round trip flights",
+        "3 nights 4-star hotel",
+        "Daily breakfast",
+        "Desert safari with BBQ",
+        "Dubai city tour"
+      ],
+      "highlights": [
+        "Desert safari experience",
+        "Burj Khalifa visit",
+        "Dubai Mall shopping",
+        "Traditional show"
+      ],
+      "visa_required": true,
+      "visa_info": {
+        "type": "Tourist Visa",
+        "duration": "30 days",
+        "requirements": [
+          "Valid passport (6+ months)",
+          "Passport copy",
+          "Recent passport photos",
+          "Flight tickets", 
+          "Hotel booking",
+          "Bank statement",
+          "Visa fee: 3,500 BDT"
+        ],
+        "processing_time": "2-3 working days"
+      }
+    },
+    {
+      "id": 6,
+      "name": "UAE Luxury Experience",
+      "destination": "uae",
+      "country": "UAE", 
+      "budget": "high",
+      "price": 85000,
+      "duration": "6 days 5 nights",
+      "image": "/uae.jpg",
+      "description": "Ultimate luxury Dubai experience with premium hotels, private tours, and exclusive experiences.",
+      "includes": [
+        "Business class flights",
+        "5 nights 5-star hotel",
+        "All meals included",
+        "Private helicopter tour",
+        "Luxury car rental"
+      ],
+      "highlights": [
+        "Helicopter city tour",
+        "Luxury hotel stays",
+        "Private beach access",
+        "VIP shopping experience"
+      ],
+      "visa_required": true,
+      "visa_info": {
+        "type": "Tourist Visa",
+        "duration": "30 days", 
+        "requirements": [
+          "Valid passport (6+ months)",
+          "Passport copy",
+          "Recent passport photos",
+          "Flight tickets",
+          "Hotel booking", 
+          "Bank statement",
+          "Visa fee: 3,500 BDT"
+        ],
+        "processing_time": "2-3 working days"
+      }
+    }
+  ],
+  "budgetRanges": {
+    "low": { "min": 0, "max": 15000, "label": "Budget Friendly (৳0 - ৳15,000)" },
+    "medium": { "min": 15001, "max": 50000, "label": "Mid Range (৳15,001 - ৳50,000)" },
+    "high": { "min": 50001, "max": 100000, "label": "Premium (৳50,001+)" }
+  },
+  "destinations": [
+    { "id": "sajek", "name": "Sajek Valley", "country": "Bangladesh" },
+    { "id": "coxs", "name": "Cox's Bazar", "country": "Bangladesh" },
+    { "id": "bangkok", "name": "Bangkok", "country": "Thailand" },
+    { "id": "uae", "name": "Dubai/UAE", "country": "UAE" }
+  ]
+}
