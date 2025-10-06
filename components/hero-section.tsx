@@ -1,19 +1,25 @@
 "use client"
 
-export function HeroSection() {
-  return (
-    <section className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
-      {/* Background Image with Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: `url('/image-bg.jpg')`,
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
-      </div>
+import { useState } from "react"
+import { QuizPopup } from "./quiz-popup"
 
-     {/* Content */}
+export function HeroSection() {
+  const [isQuizOpen, setIsQuizOpen] = useState(false)
+
+  return (
+    <>
+      <section className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
+        {/* Background Image with Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/tropical-beach-with-palm-trees-and-turquoise-ocean.jpg')`,
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
+        </div>
+
+        {/* Content */}
         <div className="relative z-10 container mx-auto px-4 py-20 sm:py-24 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             {/* Hero Text */}
@@ -27,9 +33,10 @@ export function HeroSection() {
               Take our quick 3-step quiz and get personalized travel recommendations just for you
             </p>
 
-          {/* CTAs */}
+            {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
+                onClick={() => setIsQuizOpen(true)}
                 className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 sm:px-12 sm:py-6 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105 shadow-lg"
               >
                 Find My Trip
@@ -40,8 +47,11 @@ export function HeroSection() {
                 Contact Us
               </button>
             </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <QuizPopup isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
+    </>
   )
 }
