@@ -27,7 +27,7 @@ export function HeroSection() {
               Discover Your Next
               <br className="hidden sm:block" />
               <span className="sm:hidden"> </span>
-              <span className="text-teal-400">Dream Destination</span>
+              <span className="text-teal-400 text-[0.96em]">Dream Destination</span>
             </h1>
             <p className="text-base sm:text-lg lg:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto">
               Take our quick 3-step quiz and get personalized travel recommendations just for you
@@ -37,12 +37,12 @@ export function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
                 onClick={() => setIsQuizOpen(true)}
-                className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-4 sm:px-12 sm:py-6 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105 shadow-lg"
+                className="bg-teal-500 hover:bg-teal-600 text-white px-7 py-3.5 sm:px-9 sm:py-4.5 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105 shadow-lg"
               >
                 Find My Trip
               </button>
               <button 
-                className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-8 py-4 sm:px-12 sm:py-6 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105"
+                className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-7 py-3.5 sm:px-9 sm:py-4.5 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105"
               >
                 Contact Us
               </button>

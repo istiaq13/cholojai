@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, ArrowRight, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
+import packagesData from "@/data/packages.json"
 
 interface QuizData {
   nickname: string
@@ -16,16 +17,9 @@ interface QuizPopupProps {
 }
 
 const budgetOptions = [
-  { id: "low", label: "Budget Friendly", range: "৳0 - ৳15,000", icon: "$" },
-  { id: "medium", label: "Mid Range", range: "৳15,001 - ৳50,000", icon: "$$" },
-  { id: "high", label: "Premium", range: "৳50,001+", icon: "$$$" }
-]
-
-const destinationOptions = [
-  { id: "sajek", name: "Sajek Valley", country: "Bangladesh", emoji: "BD" },
-  { id: "coxs", name: "Cox's Bazar", country: "Bangladesh", emoji: "BD" },
-  { id: "bangkok", name: "Bangkok", country: "Thailand", emoji: "TH" },
-  { id: "uae", name: "Dubai/UAE", country: "UAE", emoji: "AE" }
+  { id: "low", label: "Budget Friendly", range: "৳0 - ৳15,000" },
+  { id: "medium", label: "Mid Range", range: "৳15,001 - ৳50,000" },
+  { id: "high", label: "Premium", range: "৳50,001+" }
 ]
 
 export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
@@ -202,12 +196,9 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
                         : 'border-gray-200 hover:border-gray-300 text-gray-700'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg font-bold bg-teal-100 text-teal-700 px-2 py-1 rounded">{option.icon}</span>
-                      <div>
-                        <div className="font-semibold">{option.label}</div>
-                        <div className="text-sm opacity-75">{option.range}</div>
-                      </div>
+                    <div>
+                      <div className="font-semibold">{option.label}</div>
+                      <div className="text-sm opacity-75">{option.range}</div>
                     </div>
                   </button>
                 ))}
@@ -229,7 +220,7 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
               </div>
               
               <div className="space-y-3">
-                {destinationOptions.map((destination) => (
+                {packagesData.destinations.map((destination) => (
                   <button
                     key={destination.id}
                     onClick={() => handleDestinationToggle(destination.id)}
@@ -239,14 +230,13 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
                         : 'border-gray-200 hover:border-gray-300 text-gray-700'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg font-bold bg-blue-100 text-blue-700 px-2 py-1 rounded">{destination.emoji}</span>
+                    <div className="flex items-center justify-between">
                       <div>
                         <div className="font-semibold">{destination.name}</div>
                         <div className="text-sm opacity-75">{destination.country}</div>
                       </div>
                       {quizData.destinations.includes(destination.id) && (
-                        <div className="ml-auto text-teal-500">
+                        <div className="text-teal-500">
                           ✓
                         </div>
                       )}
