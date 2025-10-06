@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { MapPin } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 const destinations = [
   {
@@ -94,10 +95,11 @@ export function AnimatedHeroCards() {
               }}
             >
               <div className="absolute inset-0">
-                <img
+                <Image
                   src={destination.image || "/placeholder.svg"}
                   alt={destination.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               </div>

@@ -13,7 +13,7 @@ export function HeroSection() {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: `url('/tropical-beach-with-palm-trees-and-turquoise-ocean.jpg')`,
+            backgroundImage: `url('/image-bg.jpg')`,
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />

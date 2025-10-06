@@ -2,7 +2,7 @@ import { Suspense } from "react"
 import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
 import { AnimatedHeroCards } from "@/components/animated-hero-cards"
-import { WhatsAppContact } from "@/components/whatsapp-contact"
+import { ChatBotFloat } from "@/components/chatbot-float"
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
         <AnimatedHeroCards />
       </div>
       <Suspense fallback={null}>
-        <WhatsAppContact />
+        <ChatBotFloat />
       </Suspense>
     </main>
   )
