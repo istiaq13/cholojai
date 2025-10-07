@@ -6,6 +6,14 @@ import { QuizPopup } from "./quiz-popup"
 export function HeroSection() {
   const [isQuizOpen, setIsQuizOpen] = useState(false)
 
+  const handleWhatsAppContact = () => {
+    const phoneNumber = "+8801708070250"
+    const message = "Hello! I'm interested in your travel services and would like to know more about your packages."
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodedMessage}`
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <>
       <section className="relative min-h-[500px] sm:min-h-[600px] lg:min-h-[700px] flex items-center justify-center">
@@ -42,6 +50,7 @@ export function HeroSection() {
                 Find My Trip
               </button>
               <button 
+                onClick={handleWhatsAppContact}
                 className="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-7 py-3.5 sm:px-9 sm:py-4.5 text-base sm:text-lg font-semibold rounded-full transform transition-all hover:scale-105"
               >
                 Contact Us
