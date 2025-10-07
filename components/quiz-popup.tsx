@@ -98,10 +98,10 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
   if (!isOpen) return null
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-300 ${
+    <div className={`fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6 transition-all duration-300 overflow-y-auto ${
       isAnimating ? 'bg-black/50 backdrop-blur-sm' : 'bg-black/0'
     }`}>
-      <div className={`bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl transform transition-all duration-500 ease-out ${
+      <div className={`bg-white rounded-2xl w-[90vw] max-w-sm sm:max-w-md max-h-[85vh] sm:max-h-[80vh] overflow-y-auto shadow-2xl transform transition-all duration-500 ease-out my-4 ${
         isAnimating 
           ? 'opacity-100 scale-100 translate-y-0' 
           : 'opacity-0 scale-75 translate-y-8'
