@@ -13,29 +13,34 @@ interface VisaInfo {
 
 interface VisaAccordionProps {
   className?: string
+  destinations?: string[]
 }
 
-export function VisaAccordion({ className = "" }: VisaAccordionProps) {
+export function VisaAccordion({ className = "", destinations = [] }: VisaAccordionProps) {
   const [openAccordion, setOpenAccordion] = useState<string | null>(null)
 
-  // Get visa info for UAE and Thailand
-  const uaePackage = packagesData.packages.find(pkg => pkg.destination === "uae" && pkg.visa_info)
-  const thailandPackage = packagesData.packages.find(pkg => pkg.destination === "bangkok" && pkg.visa_info)
-
-  const visaData = [
+  // Get visa info for all destinations that have visa information
+  const allVisaData = [
     {
       id: "uae",
+      destination: "uae",
       country: "United Arab Emirates (UAE)",
       flag: "AE",
-      info: uaePackage?.visa_info as VisaInfo
+      info: packagesData.packages.find(pkg => pkg.destination === "uae" && pkg.visa_info)?.visa_info as VisaInfo
     },
     {
       id: "thailand",
+      destination: "bangkok",
       country: "Thailand",
       flag: "TH", 
-      info: thailandPackage?.visa_info as VisaInfo
+      info: packagesData.packages.find(pkg => pkg.destination === "bangkok" && pkg.visa_info)?.visa_info as VisaInfo
     }
-  ].filter(item => item.info) // Only include countries with visa info
+  ]
+
+  // Filter visa data based on selected destinations, or show all if no destinations specified
+  const visaData = destinations.length > 0 
+    ? allVisaData.filter(item => item.info && destinations.includes(item.destination))
+    : allVisaData.filter(item => item.info) // Only include countries with visa info
 
   const toggleAccordion = (id: string) => {
     setOpenAccordion(openAccordion === id ? null : id)

@@ -35,6 +35,10 @@ function ResultPageContent() {
   const searchParams = useSearchParams()
   const [quizData, setQuizData] = useState<QuizData | null>(null)
   const [filteredPackages, setFilteredPackages] = useState<Package[]>([])
+  const [alternativePackages, setAlternativePackages] = useState<Package[]>([])
+  const [hasExactMatches, setHasExactMatches] = useState(true)
+  const [showAlternatives, setShowAlternatives] = useState(false)
+  const [selectedAlternativeBudget, setSelectedAlternativeBudget] = useState<string>('')
 
   useEffect(() => {
     const storedQuizData = sessionStorage.getItem('quizData') // Getting quiz data from sessionStorage
@@ -46,23 +50,63 @@ function ResultPageContent() {
     const parsedQuizData: QuizData = JSON.parse(storedQuizData)
     setQuizData(parsedQuizData)
 
-    // Filter packages based on quiz responses
-    const filtered = packagesData.packages.filter((pkg: Package) => {
+    // Filter packages based on exact match (budget + destination)
+    const exactMatches = packagesData.packages.filter((pkg: Package) => {
       const budgetMatch = pkg.budget === parsedQuizData.budget
       const destinationMatch = parsedQuizData.destinations.includes(pkg.destination)
       return budgetMatch && destinationMatch
     })
 
-    // If no exact matches, show packages from selected destinations
-    if (filtered.length === 0) {
-      const destinationOnlyFiltered = packagesData.packages.filter((pkg: Package) =>
-        parsedQuizData.destinations.includes(pkg.destination)
-      )
-      setFilteredPackages(destinationOnlyFiltered)
+    if (exactMatches.length > 0) {
+      // Found exact matches
+      setFilteredPackages(exactMatches)
+      setHasExactMatches(true)
     } else {
-      setFilteredPackages(filtered)
+      // No exact matches - show "no packages found" and alternatives
+      setFilteredPackages([])
+      setHasExactMatches(false)
+      
+      // Find alternative packages for the same destinations with different budgets
+      const alternatives = packagesData.packages.filter((pkg: Package) =>
+        parsedQuizData.destinations.includes(pkg.destination) && pkg.budget !== parsedQuizData.budget
+      )
+      setAlternativePackages(alternatives)
     }
   }, [router])
+
+  // Get available alternative budgets for selected destinations
+  const getAvailableAlternativeBudgets = () => {
+    if (!quizData) return []
+    
+    const availableBudgets = new Set<string>()
+    packagesData.packages.forEach((pkg: Package) => {
+      if (quizData.destinations.includes(pkg.destination) && pkg.budget !== quizData.budget) {
+        availableBudgets.add(pkg.budget)
+      }
+    })
+    return Array.from(availableBudgets)
+  }
+
+  const handleAlternativeBudgetClick = (budget: string) => {
+    if (!quizData) return
+    
+    const alternativePackagesForBudget = packagesData.packages.filter((pkg: Package) =>
+      quizData.destinations.includes(pkg.destination) && pkg.budget === budget
+    )
+    
+    setAlternativePackages(alternativePackagesForBudget)
+    setSelectedAlternativeBudget(budget)
+    setShowAlternatives(true)
+  }
+
+  const getBudgetLabel = (budget: string) => {
+    switch (budget) {
+      case 'low': return 'Budget Friendly'
+      case 'medium': return 'Mid Range'
+      case 'high': return 'Premium'
+      default: return budget
+    }
+  }
 
   const handleWhatsAppContact = (packageData: Package) => {
     const phoneNumber = "+8801708070250"
@@ -141,7 +185,7 @@ function ResultPageContent() {
         </div>
 
         {/* Packages Grid */}
-        {filteredPackages.length > 0 ? (
+        {hasExactMatches ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPackages.map((pkg) => (
               <div key={pkg.id} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -221,27 +265,158 @@ function ResultPageContent() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <div className="text-4xl mb-4 font-bold text-gray-400">No Results</div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              No packages found for your preferences
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Try adjusting your budget or destinations to see more options.
-            </p>
-            <button
-              onClick={() => router.push('/')}
-              className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
-            >
-              Take Quiz Again
-            </button>
-          </div>
+          <>
+            {/* No Exact Match Message */}
+            <div className="text-center py-12">
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                Oops! No packages found
+              </h3>
+              <p className="text-gray-600 mb-8">
+                No {packagesData.budgetRanges[quizData.budget as keyof typeof packagesData.budgetRanges]?.label} packages available for your selected destinations.
+              </p>
+              
+              {/* Alternative Budget Buttons */}
+              {getAvailableAlternativeBudgets().length > 0 ? (
+                <>
+                  <p className="text-gray-700 mb-6 font-medium">
+                    But we have packages in other budget ranges:
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-4 mb-8">
+                    {getAvailableAlternativeBudgets().map((budget) => (
+                      <button
+                        key={budget}
+                        onClick={() => handleAlternativeBudgetClick(budget)}
+                        className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${
+                          budget === 'medium'
+                            ? 'bg-teal-500 hover:bg-teal-600 text-white'
+                            : budget === 'high'
+                            ? 'bg-orange-500 hover:bg-orange-600 text-white'
+                            : 'bg-teal-600 hover:bg-teal-700 text-white'
+                        }`}
+                      >
+                        {getBudgetLabel(budget)} Packages
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="py-8">
+                  <p className="text-gray-600 mb-6">
+                    We don&apos;t have any packages for your selected destinations yet.
+                  </p>
+                  <button
+                    onClick={() => router.push('/')}
+                    className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+                  >
+                    Take Quiz Again
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Show Alternative Packages when button is clicked */}
+            {showAlternatives && alternativePackages.length > 0 && (
+              <>
+                <div className="text-center mb-8">
+                  <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                    {getBudgetLabel(selectedAlternativeBudget)} Packages for your destinations:
+                  </h3>
+                </div>
+                
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {alternativePackages.map((pkg) => (
+                    <div key={pkg.id} className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                      {/* Alternative Package Image */}
+                      <div className="relative h-48 overflow-hidden">
+                        <Image
+                          src={pkg.image}
+                          alt={pkg.name}
+                          width={400}
+                          height={192}
+                          className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                        />
+                        <div className="absolute top-4 left-4">
+                          <span className="bg-teal-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                            {getBudgetLabel(pkg.budget)}
+                          </span>
+                        </div>
+                        {pkg.visa_required && (
+                          <div className="absolute top-4 right-4">
+                            <span className="bg-red-500 text-white px-2 py-1 rounded text-xs">
+                              Visa Required
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Alternative Package Content */}
+                      <div className="p-6">
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">{pkg.name}</h3>
+                        
+                        <div className="flex items-center gap-2 text-gray-600 mb-2">
+                          <MapPin className="h-4 w-4" />
+                          <span className="text-sm">{pkg.country}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-2 text-gray-600 mb-4">
+                          <Clock className="h-4 w-4" />
+                          <span className="text-sm">{pkg.duration}</span>
+                        </div>
+
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{pkg.description}</p>
+
+                        {/* Price */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div>
+                            <span className="text-2xl font-bold text-gray-800">৳{pkg.price.toLocaleString()}</span>
+                            <span className="text-gray-500 text-sm">/person</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                            <span className="text-sm text-gray-600">4.8</span>
+                          </div>
+                        </div>
+
+                        {/* Highlights */}
+                        <div className="mb-6">
+                          <h4 className="font-semibold text-gray-800 mb-2 text-sm">Highlights:</h4>
+                          <div className="space-y-1">
+                            {pkg.highlights.slice(0, 3).map((highlight, index) => (
+                              <div key={index} className="flex items-center gap-2">
+                                <CheckCircle className="h-3 w-3 text-teal-500" />
+                                <span className="text-xs text-gray-600">{highlight}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* CTA Button */}
+                        <button
+                          onClick={() => handleWhatsAppContact(pkg)}
+                          className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                        >
+                          Book This Package
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Visa Information for Alternative Packages */}
+                {alternativePackages.some(pkg => pkg.visa_required) && (
+                  <div className="mt-12">
+                    <VisaAccordion destinations={quizData.destinations} />
+                  </div>
+                )}
+              </>
+            )}
+          </>
         )}
 
         {/* Visa Information */}
         {filteredPackages.some(pkg => pkg.visa_required) && (
           <div className="mt-12">
-            <VisaAccordion />
+            <VisaAccordion destinations={quizData.destinations} />
           </div>
         )}
 
