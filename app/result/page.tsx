@@ -50,7 +50,7 @@ function ResultPageContent() {
     const parsedQuizData: QuizData = JSON.parse(storedQuizData)
     setQuizData(parsedQuizData)
 
-    // Filter packages based on exact match (budget + destination)
+    // Filter packages based on exact match (budget + locaiton)
     const exactMatches = packagesData.packages.filter((pkg: Package) => {
       const budgetMatch = pkg.budget === parsedQuizData.budget
       const destinationMatch = parsedQuizData.destinations.includes(pkg.destination)

@@ -40,7 +40,7 @@ export function VisaAccordion({ className = "", destinations = [] }: VisaAccordi
   // Filter visa data based on selected destinations, or show all if no destinations specified
   const visaData = destinations.length > 0 
     ? allVisaData.filter(item => item.info && destinations.includes(item.destination))
-    : allVisaData.filter(item => item.info) // Only include countries with visa info
+    : allVisaData.filter(item => item.info)
 
   const toggleAccordion = (id: string) => {
     setOpenAccordion(openAccordion === id ? null : id)

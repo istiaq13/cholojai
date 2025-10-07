@@ -22,24 +22,20 @@ export function Header() {
                 Home
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/about" className="text-white relative group transition-all duration-300 hover:scale-110">
-                About
+              <Link href="/destinations" className="text-white relative group transition-all duration-300 hover:scale-110">
+                Destinations
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/tour" className="text-white relative group transition-all duration-300 hover:scale-110">
-                Tour
+              <Link href="/visa-infos" className="text-white relative group transition-all duration-300 hover:scale-110">
+                Visa Infos
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/hotels" className="text-white relative group transition-all duration-300 hover:scale-110">
-                Hotels
+              <Link href="/reviews" className="text-white relative group transition-all duration-300 hover:scale-110">
+                Reviews
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
-              <Link href="/blog" className="text-white relative group transition-all duration-300 hover:scale-110">
-                Blog
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link href="/contact" className="text-white relative group transition-all duration-300 hover:scale-110">
-                Contact
+              <Link href="/about-us" className="text-white relative group transition-all duration-300 hover:scale-110">
+                About Us
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             </nav>
@@ -78,34 +74,28 @@ export function Header() {
               Home
             </Link>
             <Link 
-              href="/about" 
+              href="/destinations" 
               className="text-white text-lg py-2 border-b border-white/10"
             >
-              About
+              Destinations
             </Link>
             <Link 
-              href="/tour" 
+              href="/visa-infos" 
               className="text-white text-lg py-2 border-b border-white/10"
             >
-              Tour
+              Visa Infos
             </Link>
             <Link 
-              href="/hotels" 
+              href="/reviews" 
               className="text-white text-lg py-2 border-b border-white/10"
             >
-              Hotels
+              Reviews
             </Link>
             <Link 
-              href="/blog" 
-              className="text-white text-lg py-2 border-b border-white/10"
-            >
-              Blog
-            </Link>
-            <Link 
-              href="/contact" 
+              href="/about-us" 
               className="text-white text-lg py-2"
             >
-              Contact
+              About Us
             </Link>
             <div className="flex flex-col gap-3 pt-4">
               <button className="text-white hover:bg-white/10 w-full px-5 py-2.5 text-base rounded-md transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
