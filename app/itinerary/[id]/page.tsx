@@ -5,6 +5,52 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Plane, Hotel, FileText } from "lucide-react";
 
+interface Package {
+  id: number;
+  destination: string;
+  name: string;
+  country: string;
+  duration: string;
+  price: number;
+  budget: string;
+  image: string;
+  description: string;
+  visa_required: boolean;
+  visa_info?: {
+    type: string;
+    duration: string;
+    processing_time: string;
+    requirements: string[];
+  };
+  trip_dates?: {
+    start: string;
+    end: string;
+  };
+  daily_schedule?: Array<{
+    day: string;
+    activities: Array<{
+      time: string;
+      activity: string;
+      location: string;
+      transport?: string;
+      accommodation?: string;
+    }>;
+  }>;
+  accommodation?: {
+    hotel: string;
+    address: string;
+    check_in: string;
+    check_out: string;
+  };
+  transportation?: {
+    flight: string;
+    departure: string;
+    arrival: string;
+    flight_details: string;
+  };
+  notes?: string[];
+}
+
 async function getData() {
   const file = path.join(process.cwd(), "data", "packages.json");
   const json = await fs.readFile(file, "utf8");
@@ -12,13 +58,13 @@ async function getData() {
 }
 
 export async function generateStaticParams() {
-  const { packages } = await getData();
-  return packages.map((p: any) => ({ id: p.destination }));
+  const { packages }: { packages: Package[] } = await getData();
+  return packages.map((p: Package) => ({ id: p.destination }));
 }
 
 export default async function ItineraryPage({ params }: { params: { id: string } }) {
-  const { packages } = await getData();
-  const pkg = packages.find((p: any) => p.destination === params.id);
+  const { packages }: { packages: Package[] } = await getData();
+  const pkg = packages.find((p: Package) => p.destination === params.id);
   if (!pkg) notFound();
 
   return (
@@ -87,12 +133,12 @@ export default async function ItineraryPage({ params }: { params: { id: string }
       <section className="container mx-auto px-4 mt-14">
         <h2 className="text-2xl font-semibold mb-4">Daily Schedule</h2>
         <div className="border-l-4 border-teal-600 pl-6 space-y-8">
-          {pkg.daily_schedule?.map((day: any, idx: number) => (
+          {pkg.daily_schedule?.map((day, idx: number) => (
             <div key={idx} className="relative">
               <div className="absolute -left-[34px] top-1 w-6 h-6 bg-teal-600 rounded-full"></div>
               <h3 className="text-xl font-semibold mb-2">Day {idx + 1} – {day.day}</h3>
               <ul className="space-y-2">
-                {day.activities.map((a: any, i: number) => (
+                {day.activities.map((a, i: number) => (
                   <li key={i} className="bg-white shadow rounded-lg p-3">
                     <p><span className="font-semibold">{a.time}</span> — {a.activity}</p>
                     <p className="text-sm text-gray-500">{a.location}</p>
