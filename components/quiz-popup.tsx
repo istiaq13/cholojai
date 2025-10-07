@@ -53,8 +53,7 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
   }
 
   const handleSubmit = () => {
-    // Store quiz data in sessionStorage for the result page
-    sessionStorage.setItem('quizData', JSON.stringify(quizData))
+    sessionStorage.setItem('quizData', JSON.stringify(quizData))  // Store quiz data in sessionStorage for the result page
     
     // Preserve UTM parameters
     const urlParams = new URLSearchParams(window.location.search)
@@ -79,6 +78,12 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
         ? prev.destinations.filter(id => id !== destinationId)
         : [...prev.destinations, destinationId]
     }))
+  }
+
+  const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    const filteredValue = value.replace(/[^a-zA-Z\s]/g, '') // Only allow letters and spaces as input in the popup
+    setQuizData(prev => ({ ...prev, nickname: filteredValue }))
   }
 
   const isStepValid = () => {
@@ -162,9 +167,9 @@ export function QuizPopup({ isOpen, onClose }: QuizPopupProps) {
               <div>
                 <input
                   type="text"
-                  placeholder="Enter your nickname"
+                  placeholder="Enter your name"
                   value={quizData.nickname}
-                  onChange={(e) => setQuizData(prev => ({ ...prev, nickname: e.target.value }))}
+                  onChange={handleNicknameChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all text-gray-900 placeholder-gray-500 bg-white"
                   autoFocus
                 />
