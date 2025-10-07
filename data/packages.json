@@ -23,7 +23,33 @@
         "Traditional tribal culture",
         "Photography opportunities"
       ],
-      "visa_required": false
+      "visa_required": false,
+      "trip_dates": {
+        "start": "2025-11-01",
+        "end": "2025-11-02"
+      },
+      "daily_schedule": [
+        {
+          "day": "Day 1",
+          "activities": [
+            {
+              "time": "9:00 AM",
+              "activity": "Check-in at hotel",
+              "location": "Sajek Valley Resort"
+            },
+            {
+              "time": "12:00 PM",
+              "activity": "Lunch",
+              "location": "Local restaurant"
+            },
+            {
+              "time": "4:00 PM",
+              "activity": "Sunset point visit",
+              "location": "Sunset View Point"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 2,
@@ -48,7 +74,28 @@
         "Fresh seafood",
         "Water sports activities"
       ],
-      "visa_required": false
+      "visa_required": false,
+      "trip_dates": {
+        "start": "2025-12-01",
+        "end": "2025-12-03"
+      },
+      "daily_schedule": [
+        {
+          "day": "Day 1",
+          "activities": [
+            {
+              "time": "10:00 AM",
+              "activity": "Arrival at hotel",
+              "location": "Cox's Bazar Beach Resort"
+            },
+            {
+              "time": "2:00 PM",
+              "activity": "Beach activities",
+              "location": "Cox's Bazar Beach"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 3,
@@ -87,7 +134,33 @@
           "Visa fee: 1,000 BDT"
         ],
         "processing_time": "3-5 working days"
-      }
+      },
+      "trip_dates": {
+        "start": "2025-12-05",
+        "end": "2025-12-08"
+      },
+      "daily_schedule": [
+        {
+          "day": "Day 1",
+          "activities": [
+            {
+              "time": "9:00 AM",
+              "activity": "Arrival at Bangkok",
+              "location": "Suvarnabhumi Airport"
+            },
+            {
+              "time": "12:00 PM",
+              "activity": "Lunch",
+              "location": "Street food market"
+            },
+            {
+              "time": "4:00 PM",
+              "activity": "Visit Grand Palace",
+              "location": "Grand Palace"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 4,
@@ -126,7 +199,28 @@
           "Visa fee: 1,000 BDT"
         ],
         "processing_time": "3-5 working days"
-      }
+      },
+      "trip_dates": {
+        "start": "2025-12-10",
+        "end": "2025-12-14"
+      },
+      "daily_schedule": [
+        {
+          "day": "Day 1",
+          "activities": [
+            {
+              "time": "9:00 AM",
+              "activity": "Check-in at luxury hotel",
+              "location": "Luxury Hotel in Bangkok"
+            },
+            {
+              "time": "2:00 PM",
+              "activity": "Private city tour",
+              "location": "Bangkok City Tour"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": 5,
@@ -165,46 +259,28 @@
           "Visa fee: 3,500 BDT"
         ],
         "processing_time": "2-3 working days"
-      }
-    },
-    {
-      "id": 6,
-      "name": "UAE Luxury Experience",
-      "destination": "uae",
-      "country": "UAE", 
-      "budget": "high",
-      "price": 85000,
-      "duration": "6 days 5 nights",
-      "image": "/uae.jpg",
-      "description": "Ultimate luxury Dubai experience with premium hotels, private tours, and exclusive experiences.",
-      "includes": [
-        "Business class flights",
-        "5 nights 5-star hotel",
-        "All meals included",
-        "Private helicopter tour",
-        "Luxury car rental"
-      ],
-      "highlights": [
-        "Helicopter city tour",
-        "Luxury hotel stays",
-        "Private beach access",
-        "VIP shopping experience"
-      ],
-      "visa_required": true,
-      "visa_info": {
-        "type": "Tourist Visa",
-        "duration": "30 days", 
-        "requirements": [
-          "Valid passport (6+ months)",
-          "Passport copy",
-          "Recent passport photos",
-          "Flight tickets",
-          "Hotel booking", 
-          "Bank statement",
-          "Visa fee: 3,500 BDT"
-        ],
-        "processing_time": "2-3 working days"
-      }
+      },
+      "trip_dates": {
+        "start": "2025-12-15",
+        "end": "2025-12-18"
+      },
+      "daily_schedule": [
+        {
+          "day": "Day 1",
+          "activities": [
+            {
+              "time": "10:00 AM",
+              "activity": "Arrive in Dubai",
+              "location": "Dubai International Airport"
+            },
+            {
+              "time": "12:00 PM",
+              "activity": "Visit Burj Khalifa",
+              "location": "Burj Khalifa"
+            }
+          ]
+        }
+      ]
     }
   ],
   "budgetRanges": {
