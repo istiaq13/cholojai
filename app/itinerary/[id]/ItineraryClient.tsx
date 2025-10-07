@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ArrowLeft, Plane, Hotel } from "lucide-react";
 import ShareButton from "@/components/ShareButton";
 import DownloadPDFButton from "@/components/DownloadPDFButton";
+import { MapPin, Calendar, DollarSign } from "lucide-react";
 
 type VisaInfo = {
   type: string;
@@ -75,9 +76,9 @@ export default function ItineraryClient({ pkg }: { pkg: Package }) {
       </nav>
 
       {/* Itinerary Content */}
-      <div id="itinerary-content">
+      <div id="itinerary-content" className="mt-20 px-4">
         {/* Hero Section */}
-        <section className="relative mt-20">
+        <section className="relative">
           <Image
             src={pkg.image}
             alt={pkg.name}
@@ -87,7 +88,7 @@ export default function ItineraryClient({ pkg }: { pkg: Package }) {
             priority
           />
           <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
-            <h1 className="text-4xl font-bold text-teal-500">{pkg.name}</h1>
+            <h1 className="text-4xl font-bold text-white-500">{pkg.name}</h1>
             <p className="text-lg mt-2">
               {pkg.country} • {pkg.duration} • ৳{pkg.price.toLocaleString()}
             </p>
@@ -107,11 +108,27 @@ export default function ItineraryClient({ pkg }: { pkg: Package }) {
               <h2 className="text-2xl font-semibold mb-3">Trip Overview</h2>
               <p className="text-gray-700 mb-4">{pkg.description}</p>
 
-              <ul className="text-gray-600 space-y-2">
-                <li><strong>Start Location:</strong> Dhaka (default)</li>
-                <li><strong>Destination:</strong> {pkg.destination.toUpperCase()}</li>
-                <li><strong>Price:</strong> ৳{pkg.price.toLocaleString()}</li>
-                <li><strong>Duration:</strong> {pkg.duration}</li>
+              <ul className="text-gray-600 space-y-4">
+                {/* Start Location */}
+                <li className="flex items-center gap-2">
+                  <MapPin size={20} className="text-teal-600" />
+                  <strong>Start Location:</strong> Dhaka (default)
+                </li>
+                {/* Destination */}
+                <li className="flex items-center gap-2">
+                  <MapPin size={20} className="text-teal-600" />
+                  <strong>Destination:</strong> {pkg.destination.toUpperCase()}
+                </li>
+                {/* Price */}
+                <li className="flex items-center gap-2">
+                  <DollarSign size={20} className="text-teal-600" />
+                  <strong>Price:</strong> ৳{pkg.price.toLocaleString()}
+                </li>
+                {/* Duration */}
+                <li className="flex items-center gap-2">
+                  <Calendar size={20} className="text-teal-600" />
+                  <strong>Duration:</strong> {pkg.duration}
+                </li>
               </ul>
             </div>
 
@@ -155,64 +172,23 @@ export default function ItineraryClient({ pkg }: { pkg: Package }) {
           </div>
         </section>
 
-        {/* Accommodation & Transport */}
-        <section className="container mx-auto px-4 mt-14 grid md:grid-cols-2 gap-8">
-          {pkg.accommodation && (
-            <div className="bg-white rounded-lg shadow p-5">
-              <div className="flex items-center gap-2 mb-2">
-                <Hotel size={20} className="text-teal-600" />
-                <h3 className="text-xl font-semibold">Accommodation</h3>
-              </div>
-              <p>{pkg.accommodation.hotel}</p>
-              <p className="text-sm text-gray-500">{pkg.accommodation.address}</p>
-              <p className="text-sm text-gray-500">Check-in: {pkg.accommodation.check_in}</p>
-              <p className="text-sm text-gray-500">Check-out: {pkg.accommodation.check_out}</p>
-            </div>
-          )}
-
-          {pkg.transportation && (
-            <div className="bg-white rounded-lg shadow p-5">
-              <div className="flex items-center gap-2 mb-2">
-                <Plane size={20} className="text-teal-600" />
-                <h3 className="text-xl font-semibold">Transportation</h3>
-              </div>
-              <p>{pkg.transportation.flight}</p>
-              <p className="text-sm text-gray-500">Departure: {pkg.transportation.departure}</p>
-              <p className="text-sm text-gray-500">Arrival: {pkg.transportation.arrival}</p>
-              <p className="text-sm text-gray-500">{pkg.transportation.flight_details}</p>
-            </div>
-          )}
-        </section>
-
-        {/* Notes */}
-        {pkg.notes && (
-          <section className="container mx-auto px-4 mt-14">
-            <h2 className="text-2xl font-semibold mb-4">Notes / Special Instructions</h2>
-            <ul className="list-disc pl-6 text-gray-700 space-y-2">
-              {pkg.notes.map((note, i) => (
-                <li key={i}>{note}</li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </div>
-
-      {/* CTA Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t py-4 flex justify-center gap-4">
-        <Link
-          href={`https://wa.me/8801708070250?text=${encodeURIComponent(
-            `Hi! I'm interested in ${pkg.name} (${pkg.duration}) priced at ৳${pkg.price}.`
-          )}`}
-          className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all"
-        >
-          Book via WhatsApp
-        </Link>
-        <DownloadPDFButton fileName={`${pkg.destination}-itinerary`} />
-        <ShareButton
-          title={`Check out this trip to ${pkg.name}!`}
-          text={`I'm planning a trip to ${pkg.name} (${pkg.duration}) — looks amazing!`}
-          url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com"}/itinerary/${pkg.destination}`}
-        />
+       {/* Buttons after Daily Schedule - Centered */}
+        <div className="container mx-auto px-4 mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 max-w-2xl">
+          <Link
+            href={`https://wa.me/8801708070250?text=${encodeURIComponent(
+              `Hi! I'm interested in ${pkg.name} (${pkg.duration}) priced at ৳${pkg.price}.`
+            )}`}
+            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all w-full sm:w-auto text-center"
+          >
+            Book via WhatsApp
+          </Link>
+          <DownloadPDFButton fileName={`${pkg.destination}-itinerary`} />
+          <ShareButton
+            title={`Check out this trip to ${pkg.name}!`}
+            text={`I'm planning a trip to ${pkg.name} (${pkg.duration}) — looks amazing!`}
+            url={`${process.env.NEXT_PUBLIC_BASE_URL || "https://yourdomain.com"}/itinerary/${pkg.destination}`}
+          />
+        </div>
       </div>
     </main>
   );

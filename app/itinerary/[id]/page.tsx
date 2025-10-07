@@ -1,6 +1,6 @@
 // This file is now for server-side logic, fetching data, generating metadata, etc.
 
-// Remove the `use client` directive from this part
+
 import path from "path";
 import fs from "fs/promises";
 import { notFound } from "next/navigation";
