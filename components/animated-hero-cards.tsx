@@ -5,10 +5,12 @@ import { MapPin } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 
+
 const destinations = [
   {
     id: 1,
     name: "Sajek",
+    destination: "sajek", 
     country: "Bangladesh",
     price: 150,
     image: "/sajek.jpg",
@@ -16,6 +18,7 @@ const destinations = [
   {
     id: 2,
     name: "Cox's Bazar",
+    destination: "coxs", 
     country: "Bangladesh",
     price: 120,
     image: "/coxs.jpg",
@@ -23,6 +26,7 @@ const destinations = [
   {
     id: 3,
     name: "Bangkok",
+    destination: "bangkok", 
     country: "Thailand",
     price: 300,
     image: "/bangkok.jpg",
@@ -30,6 +34,7 @@ const destinations = [
   {
     id: 4,
     name: "UAE",
+    destination: "uae", 
     country: "United Arab Emirates",
     price: 500,
     image: "/uae.jpg",
@@ -49,11 +54,9 @@ export function AnimatedHeroCards() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-
           if (!entry.isIntersecting && entry.boundingClientRect.top < -100) {
             setShouldTransform(true)
-          } 
-          else if (entry.isIntersecting || entry.boundingClientRect.top >= -100) {
+          } else if (entry.isIntersecting || entry.boundingClientRect.top >= -100) {
             setShouldTransform(false)
           }
         })
@@ -61,7 +64,7 @@ export function AnimatedHeroCards() {
       {
         threshold: 0.1,
         rootMargin: "0px 0px -100px 0px",
-      },
+      }
     )
 
     if (sectionRef.current) {
@@ -86,7 +89,7 @@ export function AnimatedHeroCards() {
           {destinations.map((destination, index) => (
             <Link
               key={destination.id}
-              href="#"
+              href={`/itinerary/${destination.destination}`} // Now correctly link to itinerary page
               className={`relative rounded-xl sm:rounded-2xl overflow-hidden group cursor-pointer shadow-lg sm:shadow-xl hover:shadow-2xl bg-white transition-all duration-700 min-h-[240px] sm:min-h-[280px] lg:min-h-[300px] ${
                 isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"
               }`}
