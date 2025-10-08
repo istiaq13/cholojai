@@ -75,9 +75,10 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
     scrollToBottom()
   }, [messages])
 
-  const searchFAQ = (query: string): typeof databank.faqs[0] | null => {
+  const searchFAQ = (query: string): { answer: string; id: string } | null => {
     const normalizedQuery = query.toLowerCase().trim();
     
+    // Check if query matches any FAQ keywords
     let bestMatch = databank.faqs.find(faq => 
       faq.keywords.some(keyword => normalizedQuery.includes(keyword.toLowerCase()))
     );
@@ -91,91 +92,135 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       );
     }
     
-    return bestMatch || null;
+    // If it's a visa FAQ, customize the response based on destination mentioned
+    if (bestMatch && bestMatch.id === 'visa') {
+      // Check for specific destination in query
+      let targetPackage = null;
+      
+      for (const pkg of databank.packages) {
+        const destKeywords = [
+          pkg.destination.toLowerCase(),
+          pkg.name.toLowerCase(),
+          pkg.country.toLowerCase()
+        ];
+        
+        if (destKeywords.some(keyword => normalizedQuery.includes(keyword))) {
+          targetPackage = pkg;
+          break;
+        }
+      }
+      
+      // If specific destination found, return customized visa info
+      if (targetPackage) {
+        if (targetPackage.visa_required && targetPackage.visa_info) {
+          const visaInfo = targetPackage.visa_info;
+          const feeRequirement = visaInfo.requirements.find(r => r.toLowerCase().includes('fee'));
+          const fee = feeRequirement?.match(/[\d,]+/)?.[0] || 'Contact us';
+          
+          const answer = `📋 ${targetPackage.country} Visa Requirements:\n\n🎫 Type: ${visaInfo.type}\n⏱️ Duration: ${visaInfo.duration}\n⚡ Processing: ${visaInfo.processing_time}\n💰 Fee: ৳${fee}\n\nNeed visa help? Our team will guide you!`;
+          return { answer, id: bestMatch.id };
+        } else {
+          const answer = `📋 ${targetPackage.country} Visa Requirements:\n\n✅ ${targetPackage.name}: No visa needed!\n\nReady to book? Chat with us!`;
+          return { answer, id: bestMatch.id };
+        }
+      }
+      
+      // If no specific destination, build summary from all packages
+      const visaSummary: string[] = [];
+      const processedCountries = new Set<string>();
+      
+      databank.packages.forEach(pkg => {
+        if (!processedCountries.has(pkg.country)) {
+          processedCountries.add(pkg.country);
+          
+          if (pkg.visa_required && pkg.visa_info) {
+            const feeReq = pkg.visa_info.requirements.find(r => r.toLowerCase().includes('fee'));
+            const feeAmount = feeReq?.match(/[\d,]+/)?.[0] || 'Contact us';
+            visaSummary.push(`🌍 ${pkg.country}: Tourist visa (৳${feeAmount}, ${pkg.visa_info.processing_time})`);
+          } else {
+            visaSummary.push(`✅ ${pkg.country}: No visa needed`);
+          }
+        }
+      });
+      
+      const answer = `📋 Visa Requirements:\n\n${visaSummary.join('\n')}\n\nNeed visa help? Our team will guide you!`;
+      return { answer, id: bestMatch.id };
+    }
+    
+    return bestMatch ? { answer: bestMatch.answer, id: bestMatch.id } : null;
   }
 
   const searchPackages = (query: string): Package[] => {
-    const normalizedQuery = query.toLowerCase().trim();
-    
-    // Check if user is asking for all packages
-    const allPackageKeywords = [
-      'all packages',
-      'show all',
-      'all package',
-      'available packages',
-      'what packages',
-      'which packages',
-      'packages available',
-      'list packages',
-      'show packages',
-      'view all',
-      'see all',
-      'all trips',
-      'all destinations',
-      'what do you have',
-      'what do you offer',
-      'your packages',
-      'package list'
-    ];
-    
-    const isAskingForAll = allPackageKeywords.some(keyword => 
-      normalizedQuery.includes(keyword)
-    );
-    
-    if (isAskingForAll) {
-      return databank.packages; // Return all packages
-    }
-    
-    // Extract budget range from query (if mentioned)
-    let budgetMin: number | null = null;
-    let budgetMax: number | null = null;
-    
-    // Check for budget numbers in query (e.g., "15000", "50000", "15,000 to 50,000")
-    const numberMatches = normalizedQuery.match(/[\d,]+/g);
-    if (numberMatches) {
-      const numbers = numberMatches.map(n => parseInt(n.replace(/,/g, '')));
-      if (numbers.length >= 2) {
-        budgetMin = Math.min(...numbers);
-        budgetMax = Math.max(...numbers);
-      } else if (numbers.length === 1) {
-        // Single number mentioned
-        const singleNum = numbers[0];
-        if (normalizedQuery.includes('under') || normalizedQuery.includes('below') || normalizedQuery.includes('less than')) {
-          budgetMax = singleNum;
-        } else if (normalizedQuery.includes('above') || normalizedQuery.includes('more than') || normalizedQuery.includes('over')) {
-          budgetMin = singleNum;
-        } else {
-          // Assume it's a range around the number
-          budgetMin = singleNum * 0.8;
-          budgetMax = singleNum * 1.2;
-        }
-      }
-    }
-    
-    // Search for multiple packages
-    const matches = databank.packages.filter(pkg => {
-      // Budget-based filtering
-      if (budgetMin !== null || budgetMax !== null) {
-        if (budgetMin !== null && pkg.price < budgetMin) return false;
-        if (budgetMax !== null && pkg.price > budgetMax) return false;
-        return true; // Within budget range
-      }
-      
-      // Keyword-based search
-      const searchTerms = [
-        pkg.destination.toLowerCase(),
-        pkg.name.toLowerCase(),
-        pkg.country.toLowerCase(),
-        pkg.budget.toLowerCase()
-      ];
-      
-      return searchTerms.some(term => 
-        normalizedQuery.includes(term) || term.includes(normalizedQuery)
-      );
-    });
-    
-    return matches;
+  const normalizedQuery = query.toLowerCase().trim();
+  
+  // Check if user is asking for all packages
+  const allPackageKeywords = [
+    'all packages', 'show all', 'all package', 'available packages', 
+    'what packages', 'which packages', 'packages available', 
+    'list packages', 'show packages', 'view all', 'see all', 
+    'all trips', 'all destinations', 'what do you have', 'what do you offer', 
+    'your packages', 'package list'
+  ];
+  
+  const isAskingForAll = allPackageKeywords.some(keyword => 
+    normalizedQuery.includes(keyword)
+  );
+  
+  if (isAskingForAll) {
+    return databank.packages; // Return all packages
   }
+
+  // Extract budget range from query (if mentioned)
+  let budgetMin: number | null = null;
+  let budgetMax: number | null = null;
+  
+  // Check for budget numbers in query (e.g., "15000", "50000", "15,000 to 50,000")
+  const numberMatches = normalizedQuery.match(/[\d,]+/g);
+  if (numberMatches) {
+    const numbers = numberMatches.map(n => parseInt(n.replace(/,/g, '')));
+    if (numbers.length >= 2) {
+      budgetMin = Math.min(...numbers);
+      budgetMax = Math.max(...numbers);
+    } else if (numbers.length === 1) {
+      // Single number mentioned
+      const singleNum = numbers[0];
+      if (normalizedQuery.includes('under') || normalizedQuery.includes('within') || normalizedQuery.includes('below') || normalizedQuery.includes('less than')) {
+        budgetMax = singleNum;
+      } else if (normalizedQuery.includes('above') || normalizedQuery.includes('more than') || normalizedQuery.includes('over')) {
+        budgetMin = singleNum;
+      } else {
+        // Assume it's a range around the number
+        budgetMin = singleNum * 0.8;
+        budgetMax = singleNum * 1.2;
+      }
+    }
+  }
+
+  // Search for matching packages based on budget and keywords
+  const matches = databank.packages.filter(pkg => {
+    // Budget-based filtering (ensuring package price is within the specified range)
+    if (budgetMin !== null || budgetMax !== null) {
+      if (budgetMin !== null && pkg.price < budgetMin) return false; // Check if price is below the minimum
+      if (budgetMax !== null && pkg.price > budgetMax) return false; // Check if price is above the maximum
+      return true; // Package is within the budget range
+    }
+    
+    // Keyword-based search (by destination, name, country, or budget)
+    const searchTerms = [
+      pkg.destination.toLowerCase(),
+      pkg.name.toLowerCase(),
+      pkg.country.toLowerCase(),
+      pkg.budget.toLowerCase()
+    ];
+
+    return searchTerms.some(term =>
+      normalizedQuery.includes(term) || term.includes(normalizedQuery)
+    );
+  });
+  
+  return matches;
+}
+
 
   const callAI = async (query: string): Promise<string> => {
     try {
@@ -225,10 +270,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       responseContent = faqMatch.answer;
       messageSource = 'faq';
       isAnswerCard = true;
-      // Show WhatsApp CTA for booking-related FAQs
-      if (faqMatch.id === 'booking' || faqMatch.id === 'contact') {
-        setShowWhatsAppCTA(true);
-      }
+      // Don't show WhatsApp CTA for FAQs - we have the answer
     } 
     // Step 2: Check Packages
     else {
@@ -245,15 +287,14 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         messageSource = 'package';
         isAnswerCard = false;
         packageData = packageMatches;
-        // Show WhatsApp CTA when packages are shown
-        setShowWhatsAppCTA(true);
+        // Don't show WhatsApp CTA for packages - they have "Book Now" buttons
       } 
-      // Step 3: Call AI for fallback
+      // Step 3: Call AI for fallback (query not available in our data)
       else {
         responseContent = await callAI(currentQuery);
         messageSource = 'ai';
         isAnswerCard = false;
-        // Always show WhatsApp CTA for AI responses (means we don't have the answer)
+        // ONLY show WhatsApp CTA for AI responses (means we don't have the answer)
         setShowWhatsAppCTA(true);
       }
     }
@@ -284,7 +325,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       .filter(m => m.type === 'user')
       .slice(-1)[0]?.content || '';
 
-    const message = pkg 
+    let message = pkg 
       ? `Hi! I'm interested in the "${pkg.name}" package (৳${pkg.price.toLocaleString()}).`
       : lastUserMessage 
         ? `Hi! I was asking about: "${lastUserMessage}". Can you help me with this?`
@@ -294,14 +335,8 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       ? `${message}\n\n[Via: ${utmParams}]`
       : message;
 
-    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER
-    if (!phoneNumber) {
-      console.error('NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER is not set')
-      return
-    }
-
     window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(fullMessage)}`,
+      `https://wa.me/8801708070250?text=${encodeURIComponent(fullMessage)}`,
       "_blank"
     );
   }

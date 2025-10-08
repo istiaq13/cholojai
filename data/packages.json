@@ -19,7 +19,7 @@
       ],
       "highlights": [
         "Cloud touching experience",
-        "Panoramic hill views", 
+        "Panoramic hill views",
         "Traditional tribal culture",
         "Photography opportunities"
       ],
@@ -55,7 +55,7 @@
       "id": 2,
       "name": "Cox's Bazar Beach Getaway",
       "destination": "coxs",
-      "country": "Bangladesh", 
+      "country": "Bangladesh",
       "budget": "low",
       "price": 6000,
       "duration": "3 days 2 nights",
@@ -165,7 +165,7 @@
     {
       "id": 4,
       "name": "Bangkok Premium Package",
-      "destination": "bangkok", 
+      "destination": "bangkok",
       "country": "Thailand",
       "budget": "high",
       "price": 65000,
@@ -187,7 +187,7 @@
       ],
       "visa_required": true,
       "visa_info": {
-        "type": "Tourist Visa", 
+        "type": "Tourist Visa",
         "duration": "15-30 days",
         "requirements": [
           "Valid passport (6+ months)",
@@ -253,7 +253,7 @@
           "Valid passport (6+ months)",
           "Passport copy",
           "Recent passport photos",
-          "Flight tickets", 
+          "Flight tickets",
           "Hotel booking",
           "Bank statement",
           "Visa fee: 3,500 BDT"
@@ -284,64 +284,161 @@
     }
   ],
   "budgetRanges": {
-    "low": { "min": 0, "max": 15000, "label": "Budget Friendly (৳0 - ৳15,000)" },
-    "medium": { "min": 15001, "max": 50000, "label": "Mid Range (৳15,001 - ৳50,000)" },
-    "high": { "min": 50001, "max": 100000, "label": "Premium (৳50,001+)" }
+    "low": {
+      "min": 0,
+      "max": 15000,
+      "label": "Budget Friendly (৳0 - ৳15,000)"
+    },
+    "medium": {
+      "min": 15001,
+      "max": 50000,
+      "label": "Mid Range (৳15,001 - ৳50,000)"
+    },
+    "high": {
+      "min": 50001,
+      "max": 100000,
+      "label": "Premium (৳50,001+)"
+    }
   },
   "destinations": [
-    { "id": "sajek", "name": "Sajek Valley", "country": "Bangladesh" },
-    { "id": "coxs", "name": "Cox's Bazar", "country": "Bangladesh" },
-    { "id": "bangkok", "name": "Bangkok", "country": "Thailand" },
-    { "id": "uae", "name": "Dubai/UAE", "country": "UAE" }
+    {
+      "id": "sajek",
+      "name": "Sajek Valley",
+      "country": "Bangladesh"
+    },
+    {
+      "id": "coxs",
+      "name": "Cox's Bazar",
+      "country": "Bangladesh"
+    },
+    {
+      "id": "bangkok",
+      "name": "Bangkok",
+      "country": "Thailand"
+    },
+    {
+      "id": "uae",
+      "name": "Dubai/UAE",
+      "country": "UAE"
+    }
   ],
   "faqs": [
     {
       "id": "booking",
-      "keywords": ["book", "booking", "reserve", "reservation", "how to book", "make booking"],
+      "keywords": [
+        "book",
+        "booking",
+        "reserve",
+        "reservation",
+        "how to book",
+        "make booking"
+      ],
       "question": "How do I book a package?",
       "answer": "Booking is super easy! 🎉\n\n1️⃣ Choose your package\n2️⃣ Click 'Chat on WhatsApp' button below\n3️⃣ Confirm details with our team\n4️⃣ Make payment and you're set!\n\nWe offer flexible payment: full upfront or 50% advance!"
     },
     {
       "id": "payment",
-      "keywords": ["payment", "pay", "cost", "expensive", "affordable", "bkash", "nagad"],
+      "keywords": [
+        "payment",
+        "pay",
+        "expensive",
+        "affordable",
+        "bkash",
+        "nagad",
+        "how much"
+      ],
       "question": "What are the payment options?",
       "answer": "💳 Payment Options:\n\n✅ Full payment upfront, OR\n✅ 50% advance + 50% before departure\n\nWe accept:\n• bKash\n• Nagad\n• Bank Transfer\n• Cash"
     },
     {
       "id": "visa",
-      "keywords": ["visa", "document", "passport", "requirements", "papers"],
+      "keywords": [
+        "visa",
+        "document",
+        "passport",
+        "requirements",
+        "papers",
+        "visa cost",
+        "visa fee",
+        "visa price"
+      ],
       "question": "Do I need a visa?",
       "answer": "📋 Visa Requirements:\n\n✅ Sajek & Cox's Bazar: No visa needed\n🇹🇭 Bangkok: Tourist visa (৳1,000, 3-5 days)\n🇦🇪 Dubai: Tourist visa (৳3,500, 2-3 days)\n\nNeed visa help? Our team will guide you!"
     },
     {
       "id": "group",
-      "keywords": ["group", "discount", "family", "friends", "people", "offer"],
+      "keywords": [
+        "group",
+        "discount",
+        "family",
+        "friends",
+        "people",
+        "offer"
+      ],
       "question": "Are there group discounts?",
       "answer": "🎊 Group Discounts:\n\n👥 4-6 people: 5% off\n👨‍👩‍👧‍👦 7-10 people: 10% off\n🎉 11+ people: Custom rates!\n\nTraveling with friends/family? Let's create a special package!"
     },
     {
       "id": "cancellation",
-      "keywords": ["cancel", "refund", "change", "reschedule", "postpone"],
+      "keywords": [
+        "cancel",
+        "refund",
+        "change",
+        "reschedule",
+        "postpone"
+      ],
       "question": "What is the cancellation policy?",
       "answer": "🔄 Cancellation Policy:\n\n• 15+ days before: 90% refund\n• 7-14 days: 50% refund\n• Less than 7 days: Non-refundable\n\nRescheduling is free up to 10 days before departure!"
     },
     {
       "id": "duration",
-      "keywords": ["how long", "duration", "days", "nights", "time"],
+      "keywords": [
+        "how long",
+        "duration",
+        "days",
+        "nights",
+        "time"
+      ],
       "question": "How long are the trips?",
       "answer": "⏱️ Trip Durations:\n\n🏔️ Sajek: 2D/1N\n🏖️ Cox's Bazar: 3D/2N\n🇹🇭 Bangkok: 4-5D/3-4N\n🇦🇪 Dubai: 4D/3N\n\nNeed custom duration? We can arrange that!"
     },
     {
       "id": "included",
-      "keywords": ["include", "included", "cover", "what's included", "meal", "food", "transport"],
+      "keywords": [
+        "include",
+        "included",
+        "cover",
+        "what's included",
+        "meal",
+        "food",
+        "transport"
+      ],
       "question": "What's included in the packages?",
       "answer": "✨ Package Inclusions:\n\n✅ Transportation\n✅ Accommodation\n✅ Meals (varies by package)\n✅ Tour guide\n✅ Major attractions\n\nCheck specific package details for full inclusions!"
     },
     {
       "id": "contact",
-      "keywords": ["contact", "phone", "email", "call", "reach", "talk"],
+      "keywords": [
+        "contact",
+        "phone",
+        "email",
+        "call",
+        "reach",
+        "talk"
+      ],
       "question": "How can I contact you?",
       "answer": "📞 Contact Us:\n\n📱 WhatsApp: +880 1708-070250\n📧 Email: info@cholojai.com\n🕐 Hours: 9 AM - 9 PM (Daily)\n\nClick the WhatsApp button below to chat now!"
+    },
+    {
+      "id": "package_price",
+      "keywords": [
+        "price",
+        "cost",
+        "rate",
+        "pricing"
+      ],
+      "question": "What are the package prices?",
+      "answer": "💰 Our Package Prices:\n\n🏔️ Sajek Valley: ৳8,000\n🏖️ Cox's Bazar: ৳6,000\n🇹🇭 Bangkok: ৳35,000 - ৳65,000\n🇦🇪 Dubai: ৳45,000\n\nWant details? Ask about a specific destination!"
     }
   ]
 }
