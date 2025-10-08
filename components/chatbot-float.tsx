@@ -3,12 +3,19 @@
 import { useState } from "react"
 import { MessageCircle } from "lucide-react"
 import { ChatbotUI } from "./chatbot-ui"
+import { useQuiz } from "@/contexts/QuizContext"
 
 export function ChatBotFloat() {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false)
+  const { isQuizOpen } = useQuiz()
   
   const handleChatbotClick = () => {
     setIsChatbotOpen(!isChatbotOpen)
+  }
+
+  // Don't render the chatbot button if quiz is open
+  if (isQuizOpen) {
+    return <ChatbotUI isOpen={isChatbotOpen} onClose={() => setIsChatbotOpen(false)} />
   }
 
   return (

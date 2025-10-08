@@ -325,7 +325,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       .filter(m => m.type === 'user')
       .slice(-1)[0]?.content || '';
 
-    let message = pkg 
+    const message = pkg 
       ? `Hi! I'm interested in the "${pkg.name}" package (৳${pkg.price.toLocaleString()}).`
       : lastUserMessage 
         ? `Hi! I was asking about: "${lastUserMessage}". Can you help me with this?`
@@ -415,8 +415,8 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed bottom-20 right-6 z-50 w-[calc(100vw-3rem)] sm:w-96 max-w-md">
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 animate-slideUp">
+    <div className="fixed inset-0 sm:bottom-20 sm:right-6 sm:inset-auto z-50 sm:w-96 sm:max-w-md flex items-center justify-center sm:items-end sm:justify-end">
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-200 animate-slideUp w-[95vw] h-[85vh] sm:w-full sm:h-auto max-w-md sm:max-w-none">
         {/* Header */}
         <div className="bg-gradient-to-r from-teal-500 to-teal-600 p-4 text-white">
           <div className="flex items-center justify-between">
@@ -440,7 +440,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         </div>
 
         {/* Messages */}
-        <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        <div className="h-[calc(85vh-200px)] sm:h-96 overflow-y-auto p-4 space-y-4 bg-gray-50">
           {messages.map((message) => (
             <div key={message.id}>
               <div className={`flex gap-2 ${message.type === "user" ? "justify-end" : "justify-start"}`}>
