@@ -54,7 +54,12 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
     const normalizedQuery = query.toLowerCase().trim()
     
     return databank.packages.find(pkg => 
-      pkg.keywords.some(keyword => normalizedQuery.includes(keyword))
+      normalizedQuery.includes(pkg.destination.toLowerCase()) ||
+      normalizedQuery.includes(pkg.name.toLowerCase()) ||
+      normalizedQuery.includes(pkg.country.toLowerCase()) ||
+      pkg.name.toLowerCase().includes(normalizedQuery) ||
+      pkg.destination.toLowerCase().includes(normalizedQuery) ||
+      pkg.country.toLowerCase().includes(normalizedQuery)
     ) || null
   }
 

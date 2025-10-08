@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import databank from '@/data/packages.json';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
