@@ -7,7 +7,11 @@ export function HeroSection() {
   const [isQuizOpen, setIsQuizOpen] = useState(false)
 
   const handleWhatsAppContact = () => {
-    const phoneNumber = "+8801708070250"
+    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER
+    if (!phoneNumber) {
+      console.error('NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER is not set')
+      return
+    }
     const message = "Hello! I'm interested in your travel services and would like to know more about your packages."
     const encodedMessage = encodeURIComponent(message)
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}?text=${encodedMessage}`

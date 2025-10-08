@@ -174,14 +174,16 @@ export default function ItineraryClient({ pkg }: { pkg: Package }) {
 
        {/* Buttons after Daily Schedule - Centered */}
         <div className="container mx-auto px-4 mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 max-w-2xl">
-          <Link
-            href={`https://wa.me/8801708070250?text=${encodeURIComponent(
-              `Hi! I'm interested in ${pkg.name} (${pkg.duration}) priced at ৳${pkg.price}.`
-            )}`}
-            className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all w-full sm:w-auto text-center"
-          >
-            Book via WhatsApp
-          </Link>
+          {process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER && (
+            <Link
+              href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=${encodeURIComponent(
+                `Hi! I'm interested in ${pkg.name} (${pkg.duration}) priced at ৳${pkg.price}.`
+              )}`}
+              className="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all w-full sm:w-auto text-center"
+            >
+              Book via WhatsApp
+            </Link>
+          )}
           <DownloadPDFButton fileName={`${pkg.destination}-itinerary`} pkg={pkg} />
           <ShareButton
             title={`Check out this trip to ${pkg.name}!`}

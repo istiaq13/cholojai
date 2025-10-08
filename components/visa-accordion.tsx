@@ -140,14 +140,16 @@ export function VisaAccordion({ className = "", destinations = [] }: VisaAccordi
                       <span className="font-medium">Need help with visa processing?</span><br />
                       Contact us on WhatsApp for visa assistance and guidance.
                     </p>
-                    <a
-                      href="https://wa.me/8801708070250?text=Hi! I need help with visa processing for travel."
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 transform hover:scale-105"
-                    >
-                      Get Visa Help
-                    </a>
+                    {process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER && (
+                      <a
+                        href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}?text=Hi! I need help with visa processing for travel.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 transform hover:scale-105"
+                      >
+                        Get Visa Help
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>

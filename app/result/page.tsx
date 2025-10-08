@@ -109,7 +109,11 @@ function ResultPageContent() {
   }
 
   const handleWhatsAppContact = (packageData: Package) => {
-    const phoneNumber = "+8801708070250"
+    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER
+    if (!phoneNumber) {
+      console.error('NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER is not set')
+      return
+    }
     
     // Get UTM parameters
     const utmParams: string[] = []
@@ -423,13 +427,19 @@ function ResultPageContent() {
         {/* Contact Info */}
         <div className="mt-12 text-center">
           <p className="text-gray-600">
-            Need help choosing? Contact us directly on WhatsApp at{" "}
-            <a
-              href={`https://wa.me/8801708070250`}
-              className="text-teal-500 hover:text-teal-600 font-medium"
-            >
-              +880 1708 070250
-            </a>
+            {process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER ? (
+              <>
+                Need help choosing? Contact us directly on WhatsApp at{" "}
+                <a
+                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER}`}
+                  className="text-teal-500 hover:text-teal-600 font-medium"
+                >
+                  {process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER.replace(/(\d{3})(\d{4})(\d{6})/, '+$1 $2 $3')}
+                </a>
+              </>
+            ) : (
+              'Need help choosing? Please contact us for assistance.'
+            )}
           </p>
         </div>
       </div>

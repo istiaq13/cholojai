@@ -89,7 +89,7 @@ export function AnimatedHeroCards() {
           {destinations.map((destination, index) => (
             <Link
               key={destination.id}
-              href={`/itinerary/${destination.destination}`} // Now correctly link to itinerary page
+              href={`/itinerary/${destination.destination}`} // correctly link to itinerary page
               className={`relative rounded-xl sm:rounded-2xl overflow-hidden group cursor-pointer shadow-lg sm:shadow-xl hover:shadow-2xl bg-white transition-all duration-700 min-h-[240px] sm:min-h-[280px] lg:min-h-[300px] ${
                 isVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-20"
               }`}

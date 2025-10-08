@@ -284,7 +284,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       .filter(m => m.type === 'user')
       .slice(-1)[0]?.content || '';
 
-    let message = pkg 
+    const message = pkg 
       ? `Hi! I'm interested in the "${pkg.name}" package (৳${pkg.price.toLocaleString()}).`
       : lastUserMessage 
         ? `Hi! I was asking about: "${lastUserMessage}". Can you help me with this?`
@@ -294,8 +294,14 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       ? `${message}\n\n[Via: ${utmParams}]`
       : message;
 
+    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER
+    if (!phoneNumber) {
+      console.error('NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER is not set')
+      return
+    }
+
     window.open(
-      `https://wa.me/8801708070250?text=${encodeURIComponent(fullMessage)}`,
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(fullMessage)}`,
       "_blank"
     );
   }

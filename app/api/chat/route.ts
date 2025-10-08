@@ -116,10 +116,10 @@ export async function POST(req: NextRequest) {
       showCards: false
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('OpenAI API Error:', error);
     
-    if (error?.status === 401) {
+    if (error && typeof error === 'object' && 'status' in error && error.status === 401) {
       return NextResponse.json({
         response: "I'm having connection issues. Please chat with our team on WhatsApp for immediate assistance! 😊",
         error: true,
@@ -136,7 +136,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function OPTIONS(req: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
