@@ -343,35 +343,5 @@
       "question": "How can I contact you?",
       "answer": "📞 Contact Us:\n\n📱 WhatsApp: +880 1708-070250\n📧 Email: info@cholojai.com\n🕐 Hours: 9 AM - 9 PM (Daily)\n\nClick the WhatsApp button below to chat now!"
     }
-  ],
-  "packages": [
-    {
-      "keywords": ["sajek", "valley", "hill", "cloud", "tribal"],
-      "name": "Sajek Valley Adventure",
-      "price": 8000,
-      "duration": "2D/1N",
-      "description": "Cloud-touching hills with stunning views"
-    },
-    {
-      "keywords": ["cox", "coxs", "cox's", "beach", "sea", "longest beach"],
-      "name": "Cox's Bazar Beach Getaway",
-      "price": 6000,
-      "duration": "3D/2N",
-      "description": "World's longest natural sea beach"
-    },
-    {
-      "keywords": ["bangkok", "thailand", "temple", "grand palace"],
-      "name": "Bangkok City Explorer",
-      "price": 35000,
-      "duration": "4D/3N",
-      "description": "Vibrant culture with temples and street food"
-    },
-    {
-      "keywords": ["dubai", "uae", "burj khalifa", "desert safari"],
-      "name": "Dubai Desert Safari",
-      "price": 45000,
-      "duration": "4D/3N",
-      "description": "Desert adventures and modern attractions"
-    }
   ]
 }

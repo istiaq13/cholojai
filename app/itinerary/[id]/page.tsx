@@ -70,7 +70,9 @@ async function getData(): Promise<DataFile> {
 
 export async function generateStaticParams() {
   const { packages } = await getData();
-  return packages.map((p: Package) => ({ id: p.destination }));
+  return packages.map((p: Package) => ({ 
+    id: p.destination 
+  }));
 }
 
 // Server-side metadata generation
