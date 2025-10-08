@@ -48,6 +48,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
   ])
   const [isTyping, setIsTyping] = useState(false)
   const [utmParams, setUtmParams] = useState<string>("")
+  const [showWhatsAppCTA, setShowWhatsAppCTA] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         })
         .filter(Boolean)
         .join('&');
-
+      
       setUtmParams(utmValues);
     }
   }, []);
@@ -76,26 +77,27 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
 
   const searchFAQ = (query: string): typeof databank.faqs[0] | null => {
     const normalizedQuery = query.toLowerCase().trim();
-
-    let bestMatch = databank.faqs.find(faq =>
+    
+    let bestMatch = databank.faqs.find(faq => 
       faq.keywords.some(keyword => normalizedQuery.includes(keyword.toLowerCase()))
     );
 
     if (!bestMatch) {
-      bestMatch = databank.faqs.find(faq =>
+      bestMatch = databank.faqs.find(faq => 
         faq.question.toLowerCase().includes(normalizedQuery) ||
-        normalizedQuery.split(' ').some(word =>
+        normalizedQuery.split(' ').some(word => 
           word.length > 3 && faq.keywords.some(kw => kw.toLowerCase().includes(word))
         )
       );
     }
-
+    
     return bestMatch || null;
   }
 
   const searchPackages = (query: string): Package[] => {
     const normalizedQuery = query.toLowerCase().trim();
-
+    
+    // Check if user is asking for all packages
     const allPackageKeywords = [
       'all packages',
       'show all',
@@ -115,21 +117,19 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       'your packages',
       'package list'
     ];
-
-    const isAskingForAll = allPackageKeywords.some(keyword =>
+    
+    const isAskingForAll = allPackageKeywords.some(keyword => 
       normalizedQuery.includes(keyword)
     );
-
+    
     if (isAskingForAll) {
       return databank.packages; // Return all packages
     }
-
+    
     // Extract budget range from query (if mentioned)
     let budgetMin: number | null = null;
     let budgetMax: number | null = null;
-
-
-
+    
     // Check for budget numbers in query (e.g., "15000", "50000", "15,000 to 50,000")
     const numberMatches = normalizedQuery.match(/[\d,]+/g);
     if (numberMatches) {
@@ -151,7 +151,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         }
       }
     }
-
+    
     // Search for multiple packages
     const matches = databank.packages.filter(pkg => {
       // Budget-based filtering
@@ -160,7 +160,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         if (budgetMax !== null && pkg.price > budgetMax) return false;
         return true; // Within budget range
       }
-
+      
       // Keyword-based search
       const searchTerms = [
         pkg.destination.toLowerCase(),
@@ -168,12 +168,12 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         pkg.country.toLowerCase(),
         pkg.budget.toLowerCase()
       ];
-
-      return searchTerms.some(term =>
+      
+      return searchTerms.some(term => 
         normalizedQuery.includes(term) || term.includes(normalizedQuery)
       );
     });
-
+    
     return matches;
   }
 
@@ -225,23 +225,36 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       responseContent = faqMatch.answer;
       messageSource = 'faq';
       isAnswerCard = true;
-    }
+      // Show WhatsApp CTA for booking-related FAQs
+      if (faqMatch.id === 'booking' || faqMatch.id === 'contact') {
+        setShowWhatsAppCTA(true);
+      }
+    } 
     // Step 2: Check Packages
     else {
       const packageMatches = searchPackages(currentQuery);
       if (packageMatches.length > 0) {
-        responseContent = packageMatches.length === 1
-          ? `Here's the perfect package for you! 🎉`
-          : `I found ${packageMatches.length} amazing packages for you! 🎉`;
+        // Check if showing all packages
+        const isShowingAll = packageMatches.length === databank.packages.length;
+        
+        responseContent = isShowingAll
+          ? `Here are all our ${packageMatches.length} amazing travel packages! 🌍✨`
+          : packageMatches.length === 1 
+            ? `Here's the perfect package for you! 🎉`
+            : `I found ${packageMatches.length} amazing packages for you! 🎉`;
         messageSource = 'package';
         isAnswerCard = false;
         packageData = packageMatches;
-      }
+        // Show WhatsApp CTA when packages are shown
+        setShowWhatsAppCTA(true);
+      } 
       // Step 3: Call AI for fallback
       else {
         responseContent = await callAI(currentQuery);
         messageSource = 'ai';
         isAnswerCard = false;
+        // Always show WhatsApp CTA for AI responses (means we don't have the answer)
+        setShowWhatsAppCTA(true);
       }
     }
 
@@ -271,13 +284,13 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       .filter(m => m.type === 'user')
       .slice(-1)[0]?.content || '';
 
-    let message = pkg
+    let message = pkg 
       ? `Hi! I'm interested in the "${pkg.name}" package (৳${pkg.price.toLocaleString()}).`
-      : lastUserMessage
+      : lastUserMessage 
         ? `Hi! I was asking about: "${lastUserMessage}". Can you help me with this?`
         : "Hi! I have questions about your travel packages.";
 
-    const fullMessage = utmParams
+    const fullMessage = utmParams 
       ? `${message}\n\n[Via: ${utmParams}]`
       : message;
 
@@ -310,12 +323,12 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
 
       <div className="p-3">
         <h4 className="font-bold text-gray-800 text-sm mb-1">{pkg.name}</h4>
-
+        
         <div className="flex items-center gap-1 text-gray-600 mb-1">
           <MapPin className="h-3 w-3" />
           <span className="text-xs">{pkg.country}</span>
         </div>
-
+        
         <div className="flex items-center gap-1 text-gray-600 mb-2">
           <Clock className="h-3 w-3" />
           <span className="text-xs">{pkg.duration}</span>
@@ -397,12 +410,13 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
                 )}
                 <div className={`${message.type === "user" ? "max-w-[85%]" : "max-w-full flex-1"}`}>
                   {/* Text Message */}
-                  <div className={`${message.isAnswerCard
-                      ? "bg-gradient-to-br from-teal-50 to-blue-50 border border-teal-200 rounded-xl p-4 shadow-md"
+                  <div className={`${
+                    message.isAnswerCard 
+                      ? "bg-gradient-to-br from-teal-50 to-blue-50 border border-teal-200 rounded-xl p-4 shadow-md" 
                       : message.type === "user"
-                        ? "bg-teal-500 text-white rounded-2xl rounded-br-md px-4 py-2"
-                        : "bg-white text-gray-800 rounded-2xl rounded-bl-md px-4 py-2 shadow-sm"
-                    }`}>
+                      ? "bg-teal-500 text-white rounded-2xl rounded-br-md px-4 py-2"
+                      : "bg-white text-gray-800 rounded-2xl rounded-bl-md px-4 py-2 shadow-sm"
+                  }`}>
                     {message.isAnswerCard && (
                       <div className="flex items-center gap-2 mb-2 text-teal-700">
                         <div className="w-1.5 h-1.5 bg-teal-500 rounded-full"></div>
@@ -412,9 +426,10 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
                     <p className={`text-sm whitespace-pre-line ${message.isAnswerCard ? 'text-gray-800' : ''}`}>
                       {message.content}
                     </p>
-                    <p className={`text-xs mt-1 ${message.isAnswerCard ? 'text-gray-500' :
-                        message.type === "user" ? "text-teal-100" : "text-gray-500"
-                      }`}>
+                    <p className={`text-xs mt-1 ${
+                      message.isAnswerCard ? 'text-gray-500' :
+                      message.type === "user" ? "text-teal-100" : "text-gray-500"
+                    }`}>
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
@@ -435,7 +450,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
               </div>
             </div>
           ))}
-
+          
           {isTyping && (
             <div className="flex gap-2 justify-start">
               <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -450,20 +465,22 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
               </div>
             </div>
           )}
-
+          
           <div ref={messagesEndRef} />
         </div>
 
-        {/* WhatsApp CTA Bar */}
-        <div className="bg-emerald-50 border-t border-emerald-100 p-3">
-          <button
-            onClick={() => handleWhatsAppClick()}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
-          >
-            <MessageCircle size={18} />
-            <span>Chat on WhatsApp for Booking</span>
-          </button>
-        </div>
+        {/* WhatsApp CTA Bar - Only show after user interaction */}
+        {showWhatsAppCTA && (
+          <div className="bg-emerald-50 border-t border-emerald-100 p-3">
+            <button
+              onClick={() => handleWhatsAppClick()}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-colors shadow-sm active:scale-95"
+            >
+              <MessageCircle size={18} />
+              <span>Chat on WhatsApp for Booking</span>
+            </button>
+          </div>
+        )}
 
         {/* Input */}
         <div className="p-4 border-t border-gray-200 bg-white">
