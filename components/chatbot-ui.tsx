@@ -41,7 +41,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
     {
       id: "welcome",
       type: "bot",
-      content: "Hello! I'm your choloJai travel assistant.\n\nI can help you with:\n• Package information\n• Booking process\n• Visa requirements\n• Pricing & discounts\n\nWhat would you like to know?",
+      content: "Hello! 👋 I'm your choloJai travel assistant.\n\nI can help you with:\n• Package information\n• Booking process\n• Visa requirements\n• Pricing & discounts\n\nWhat would you like to know?",
       timestamp: new Date(),
       isAnswerCard: true
     }
@@ -117,10 +117,10 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
           const feeRequirement = visaInfo.requirements.find(r => r.toLowerCase().includes('fee'));
           const fee = feeRequirement?.match(/[\d,]+/)?.[0] || 'Contact us';
           
-          const answer = `${targetPackage.country} Visa Requirements:\n\nType: ${visaInfo.type}\nDuration: ${visaInfo.duration}\nProcessing: ${visaInfo.processing_time}\nFee: ৳${fee}\n\nNeed visa help? Our team will guide you!`;
+          const answer = `📋 ${targetPackage.country} Visa Requirements:\n\n🎫 Type: ${visaInfo.type}\n⏱️ Duration: ${visaInfo.duration}\n⚡ Processing: ${visaInfo.processing_time}\n💰 Fee: ৳${fee}\n\nNeed visa help? Our team will guide you!`;
           return { answer, id: bestMatch.id };
         } else {
-          const answer = `${targetPackage.country} Visa Requirements:\n\n${targetPackage.name}: No visa needed!\n\nReady to book? Chat with us!`;
+          const answer = `📋 ${targetPackage.country} Visa Requirements:\n\n✅ ${targetPackage.name}: No visa needed!\n\nReady to book? Chat with us!`;
           return { answer, id: bestMatch.id };
         }
       }
@@ -136,14 +136,14 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
           if (pkg.visa_required && pkg.visa_info) {
             const feeReq = pkg.visa_info.requirements.find(r => r.toLowerCase().includes('fee'));
             const feeAmount = feeReq?.match(/[\d,]+/)?.[0] || 'Contact us';
-            visaSummary.push(`${pkg.country}: Tourist visa (৳${feeAmount}, ${pkg.visa_info.processing_time})`);
+            visaSummary.push(`🌍 ${pkg.country}: Tourist visa (৳${feeAmount}, ${pkg.visa_info.processing_time})`);
           } else {
-            visaSummary.push(`${pkg.country}: No visa needed`);
+            visaSummary.push(`✅ ${pkg.country}: No visa needed`);
           }
         }
       });
       
-      const answer = `Visa Requirements:\n\n${visaSummary.join('\n')}\n\nNeed visa help? Our team will guide you!`;
+      const answer = `📋 Visa Requirements:\n\n${visaSummary.join('\n')}\n\nNeed visa help? Our team will guide you!`;
       return { answer, id: bestMatch.id };
     }
     
@@ -235,10 +235,10 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       }
 
       const data = await response.json();
-      return data.response || "I'm having trouble right now. Please chat with our team on WhatsApp!";
+      return data.response || "I'm having trouble right now. Please chat with our team on WhatsApp! 😊";
     } catch (error) {
       console.error('AI Error:', error);
-      return "I'm having trouble connecting right now. Please chat with our team on WhatsApp for immediate help!";
+      return "I'm having trouble connecting right now. Please chat with our team on WhatsApp for immediate help! 😊";
     }
   }
 
@@ -280,10 +280,10 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         const isShowingAll = packageMatches.length === databank.packages.length;
         
         responseContent = isShowingAll
-          ? `Here are all our ${packageMatches.length} amazing travel packages!`
+          ? `Here are all our ${packageMatches.length} amazing travel packages! 🌍✨`
           : packageMatches.length === 1 
-            ? `Here's the perfect package for you!`
-            : `I found ${packageMatches.length} amazing packages for you!`;
+            ? `Here's the perfect package for you! 🎉`
+            : `I found ${packageMatches.length} amazing packages for you! 🎉`;
         messageSource = 'package';
         isAnswerCard = false;
         packageData = packageMatches;
