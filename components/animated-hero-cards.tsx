@@ -114,10 +114,6 @@ export function AnimatedHeroCards() {
                   <MapPin className="h-3 w-3 sm:h-4 sm:w-4 text-teal-400" />
                   <span className="text-xs sm:text-sm">{destination.country}</span>
                 </div>
-                <div className="text-lg sm:text-xl font-bold">
-                  ${destination.price}
-                  <span className="text-xs sm:text-sm font-normal text-white/80">/person</span>
-                </div>
               </div>
             </Link>
           ))}

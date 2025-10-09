@@ -31,7 +31,7 @@ interface Message {
   content: string
   timestamp: Date
   isAnswerCard?: boolean
-  source?: 'faq' | 'package' | 'ai' | 'error'
+  source?: 'faq' | 'package' | 'ai' | 'error' | 'unavailable'
   packageData?: Package | Package[]
 }
 
@@ -150,77 +150,143 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
     return bestMatch ? { answer: bestMatch.answer, id: bestMatch.id } : null;
   }
 
-  const searchPackages = (query: string): Package[] => {
-  const normalizedQuery = query.toLowerCase().trim();
-  
-  // Check if user is asking for all packages
-  const allPackageKeywords = [
-    'all packages', 'show all', 'all package', 'available packages', 
-    'what packages', 'which packages', 'packages available', 
-    'list packages', 'show packages', 'view all', 'see all', 
-    'all trips', 'all destinations', 'what do you have', 'what do you offer', 
-    'your packages', 'package list'
-  ];
-  
-  const isAskingForAll = allPackageKeywords.some(keyword => 
-    normalizedQuery.includes(keyword)
-  );
-  
-  if (isAskingForAll) {
-    return databank.packages; // Return all packages
-  }
-
-  // Extract budget range from query (if mentioned)
-  let budgetMin: number | null = null;
-  let budgetMax: number | null = null;
-  
-  // Check for budget numbers in query (e.g., "15000", "50000", "15,000 to 50,000")
-  const numberMatches = normalizedQuery.match(/[\d,]+/g);
-  if (numberMatches) {
-    const numbers = numberMatches.map(n => parseInt(n.replace(/,/g, '')));
-    if (numbers.length >= 2) {
-      budgetMin = Math.min(...numbers);
-      budgetMax = Math.max(...numbers);
-    } else if (numbers.length === 1) {
-      // Single number mentioned
-      const singleNum = numbers[0];
-      if (normalizedQuery.includes('under') || normalizedQuery.includes('within') || normalizedQuery.includes('below') || normalizedQuery.includes('less than')) {
-        budgetMax = singleNum;
-      } else if (normalizedQuery.includes('above') || normalizedQuery.includes('more than') || normalizedQuery.includes('over')) {
-        budgetMin = singleNum;
-      } else {
-        // Assume it's a range around the number
-        budgetMin = singleNum * 0.8;
-        budgetMax = singleNum * 1.2;
-      }
-    }
-  }
-
-  // Search for matching packages based on budget and keywords
-  const matches = databank.packages.filter(pkg => {
-    // Budget-based filtering (ensuring package price is within the specified range)
-    if (budgetMin !== null || budgetMax !== null) {
-      if (budgetMin !== null && pkg.price < budgetMin) return false; // Check if price is below the minimum
-      if (budgetMax !== null && pkg.price > budgetMax) return false; // Check if price is above the maximum
-      return true; // Package is within the budget range
+  const checkForUnavailableDestination = (query: string): string | null => {
+    const normalizedQuery = query.toLowerCase().trim();
+    
+    // Skip if query contains budget-related terms or general package keywords
+    const skipKeywords = [
+      'within', 'under', 'below', 'above', 'over', 'between', 'range', 'budget',
+      'show all', 'all packages', 'packages', 'pack', 'packs', 'price', 'cost'
+    ];
+    
+    if (skipKeywords.some(keyword => normalizedQuery.includes(keyword))) {
+      return null;
     }
     
-    // Keyword-based search (by destination, name, country, or budget)
-    const searchTerms = [
-      pkg.destination.toLowerCase(),
-      pkg.name.toLowerCase(),
-      pkg.country.toLowerCase(),
-      pkg.budget.toLowerCase()
+    // Skip if query contains numbers (likely a budget query)
+    if (/\d/.test(normalizedQuery)) {
+      return null;
+    }
+    
+    // Common location-asking patterns (more specific)
+    const locationPatterns = [
+      /(?:tell me about|about|show me|do you have|any|have you|is there|got|available|offer)\s+(\w{3,})\s*(?:package|trip|tour|travel)/i,
+      /(\w{3,})\s*(?:package|trip|tour|travel|destination)(?!\s*(?:within|under|above|below))/i,
+      /(?:package|trip|tour|travel)\s*(?:to|for)\s+(\w{3,})/i,
+      /(?:visit|go to|travel to)\s+(\w{3,})/i
     ];
-
-    return searchTerms.some(term =>
-      normalizedQuery.includes(term) || term.includes(normalizedQuery)
+    
+    // Extract potential destination from query
+    let potentialDestination = null;
+    for (const pattern of locationPatterns) {
+      const match = query.match(pattern);
+      if (match && match[1] && match[1].length > 2) {
+        potentialDestination = match[1].toLowerCase();
+        
+        // Skip common words that aren't destinations
+        const commonWords = ['package', 'packages', 'trip', 'trips', 'tour', 'tours', 'travel', 'show', 'all', 'any', 'have', 'you', 'me', 'the', 'and', 'or'];
+        if (!commonWords.includes(potentialDestination)) {
+          break;
+        } else {
+          potentialDestination = null;
+        }
+      }
+    }
+    
+    if (!potentialDestination) return null;
+    
+    // Check if this destination exists in our packages
+    const exists = databank.packages.some(pkg => 
+      pkg.destination.toLowerCase().includes(potentialDestination) ||
+      pkg.country.toLowerCase().includes(potentialDestination) ||
+      pkg.name.toLowerCase().includes(potentialDestination)
     );
-  });
-  
-  return matches;
-}
+    
+    return exists ? null : potentialDestination;
+  }
 
+  const searchPackages = (query: string): Package[] => {
+    const normalizedQuery = query.toLowerCase().trim();
+    
+    // Extract budget range from query first (if mentioned)
+    let budgetMin: number | null = null;
+    let budgetMax: number | null = null;
+    
+    // Check for budget numbers in query (e.g., "15000", "50000", "15,000 to 50,000")
+    const numberMatches = normalizedQuery.match(/[\d,]+/g);
+    if (numberMatches) {
+      const numbers = numberMatches.map(n => parseInt(n.replace(/,/g, '')));
+      if (numbers.length >= 2) {
+        budgetMin = Math.min(...numbers);
+        budgetMax = Math.max(...numbers);
+      } else if (numbers.length === 1) {
+        // Single number mentioned
+        const singleNum = numbers[0];
+        if (normalizedQuery.includes('under') || normalizedQuery.includes('within') || normalizedQuery.includes('below') || normalizedQuery.includes('less than') || normalizedQuery.includes('up to')) {
+          budgetMax = singleNum;
+        } else if (normalizedQuery.includes('above') || normalizedQuery.includes('more than') || normalizedQuery.includes('over') || normalizedQuery.includes('from')) {
+          budgetMin = singleNum;
+        } else {
+          // Assume it's a range around the number
+          budgetMin = singleNum * 0.8;
+          budgetMax = singleNum * 1.2;
+        }
+      }
+    }
+
+    // Check if user is asking for all packages or general package information
+    const allPackageKeywords = [
+      'all packages', 'show all', 'all package', 'available packages', 
+      'what packages', 'which packages', 'packages available', 
+      'list packages', 'show packages', 'view all', 'see all', 
+      'all trips', 'all destinations', 'what do you have', 'what do you offer', 
+      'your packages', 'package list', 'show me packages', 'display packages',
+      'packages', 'package', 'trips', 'tours', 'travel packages', 
+      'holiday packages', 'vacation packages', 'tour packages',
+      'what trips', 'what tours', 'available trips', 'available tours',
+      'show trips', 'show tours', 'list trips', 'list tours',
+      'show pack', 'pack', 'packs'
+    ];
+    
+    // Also check for simple package-related words when query is short (but only if no budget constraint)
+    const isSimplePackageQuery = (
+      normalizedQuery.length <= 15 && 
+      ['packages', 'package', 'trips', 'tours', 'travel', 'tour'].includes(normalizedQuery) &&
+      budgetMin === null && budgetMax === null
+    );
+    
+    const isAskingForAll = (allPackageKeywords.some(keyword => 
+      normalizedQuery.includes(keyword)
+    ) || isSimplePackageQuery) && budgetMin === null && budgetMax === null;
+    
+    if (isAskingForAll) {
+      return databank.packages; // Return all packages
+    }
+
+    // Search for matching packages based on budget and keywords
+    const matches = databank.packages.filter(pkg => {
+      // Budget-based filtering (ensuring package price is within the specified range)
+      if (budgetMin !== null || budgetMax !== null) {
+        if (budgetMin !== null && pkg.price < budgetMin) return false; // Check if price is below the minimum
+        if (budgetMax !== null && pkg.price > budgetMax) return false; // Check if price is above the maximum
+        return true; // Package is within the budget range
+      }
+      
+      // Keyword-based search (by destination, name, country, or budget)
+      const searchTerms = [
+        pkg.destination.toLowerCase(),
+        pkg.name.toLowerCase(),
+        pkg.country.toLowerCase(),
+        pkg.budget.toLowerCase()
+      ];
+
+      return searchTerms.some(term =>
+        normalizedQuery.includes(term) || term.includes(normalizedQuery)
+      );
+    });
+    
+    return matches;
+  }
 
   const callAI = async (query: string): Promise<string> => {
     try {
@@ -260,7 +326,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
     await new Promise(resolve => setTimeout(resolve, 800));
 
     let responseContent = "";
-    let messageSource: 'faq' | 'package' | 'ai' = 'ai';
+    let messageSource: 'faq' | 'package' | 'ai' | 'unavailable' = 'ai';
     let isAnswerCard = false;
     let packageData: Package | Package[] | undefined;
 
@@ -271,8 +337,9 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       messageSource = 'faq';
       isAnswerCard = true;
       // Don't show WhatsApp CTA for FAQs - we have the answer
+      setShowWhatsAppCTA(false);
     } 
-    // Step 2: Check Packages
+    // Step 2: Check Packages (PRIORITY: Check packages before unavailable destinations)
     else {
       const packageMatches = searchPackages(currentQuery);
       if (packageMatches.length > 0) {
@@ -288,14 +355,26 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
         isAnswerCard = false;
         packageData = packageMatches;
         // Don't show WhatsApp CTA for packages - they have "Book Now" buttons
-      } 
-      // Step 3: Call AI for fallback (query not available in our data)
+        setShowWhatsAppCTA(false);
+      }
+      // Step 3: Check for unavailable destinations (ONLY if no packages found)
       else {
-        responseContent = await callAI(currentQuery);
-        messageSource = 'ai';
-        isAnswerCard = false;
-        // ONLY show WhatsApp CTA for AI responses (means we don't have the answer)
-        setShowWhatsAppCTA(true);
+        const unavailableDestination = checkForUnavailableDestination(currentQuery);
+        if (unavailableDestination) {
+          const destinationCapitalized = unavailableDestination.charAt(0).toUpperCase() + unavailableDestination.slice(1);
+          responseContent = `Sorry, we don't currently offer packages to ${destinationCapitalized}. 😔\n\nBut don't worry! Our team can help you plan a custom trip. Contact us via WhatsApp for personalized travel solutions! 🌟`;
+          messageSource = 'unavailable';
+          isAnswerCard = true;
+          setShowWhatsAppCTA(true); // Show WhatsApp CTA for unavailable destinations
+        }
+        // Step 4: Call AI for fallback (query not available in our data)
+        else {
+          responseContent = await callAI(currentQuery);
+          messageSource = 'ai';
+          isAnswerCard = false;
+          // Show WhatsApp CTA for AI responses (means we don't have the answer)
+          setShowWhatsAppCTA(true);
+        }
       }
     }
 
@@ -325,7 +404,7 @@ export function ChatbotUI({ isOpen, onClose }: ChatbotUIProps) {
       .filter(m => m.type === 'user')
       .slice(-1)[0]?.content || '';
 
-    let message = pkg 
+    const message = pkg 
       ? `Hi! I'm interested in the "${pkg.name}" package (৳${pkg.price.toLocaleString()}).`
       : lastUserMessage 
         ? `Hi! I was asking about: "${lastUserMessage}". Can you help me with this?`
