@@ -1,10 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { QuizPopup } from "./quiz-popup"
-import { useQuiz } from "@/contexts/QuizContext"
 
 export function HeroSection() {
-  const { isQuizOpen, setIsQuizOpen } = useQuiz()
+  const [isQuizOpen, setIsQuizOpen] = useState(false)
 
   const handleWhatsAppContact = () => {
     const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_PHONE_NUMBER
